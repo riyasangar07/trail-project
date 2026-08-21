@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "dkte_ycp_portal/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "dkte_ycp_portal/wsgi.py"
+    }
+  ]
+}
