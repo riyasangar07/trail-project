@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DKTE YCP Diploma Newsletter Portal</title>
+    
+    <!-- Meta Descriptions and SEO -->
+    <meta name="description" content="Official Newsletter and Academic Portal for DKTE YCP Diploma, Ichalkaranji. View departments, faculty, events, notices, placements, and newsletters.">
+    <meta name="keywords" content="DKTE, YCP, Diploma, Newsletter, CSE, AIML, ENTC, Mechanical, Civil, Electrical, Mechatronics">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dkte: {
+                            blue: '#0f172a',      // Deep Navy Slate
+                            primary: '#1e40af',   // Slate Blue
+                            orange: '#f97316',    // Accent Orange
+                            accent: '#3b82f6',    // Bright Blue
+                            lightBg: '#f8fafc',
+                            darkBg: '#0b0f19',
+                            darkCard: '#131c2e'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col transition-colors duration-300 dark:bg-dkte-darkBg dark:text-slate-100" id="body-root">
+
+    <!-- Global Alert Notifications -->
+    <div id="toast-container" class="fixed top-6 right-6 z-50 flex flex-col gap-3"></div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/70 backdrop-blur-md border-b border-slate-200/80 transition-colors duration-300 dark:bg-dkte-darkCard/70 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" onclick="navigateTo('landing'); return false;" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 bg-gradient-to-tr from-blue-700 to-orange-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
+                    <span class="text-lg">DKTE</span>
+                </div>
+                <div>
+                    <h1 class="text-base font-bold tracking-tight bg-gradient-to-r from-blue-900 to-orange-500 bg-clip-text text-transparent dark:from-white dark:to-orange-400">DKTE YCP Diploma</h1>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-widest">Newsletter Portal</p>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Items -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-600 dark:text-slate-300">
+                <a href="#" onclick="navigateTo('landing'); return false;" class="hover:text-blue-600 dark:hover:text-orange-400 transition-colors flex items-center gap-1.5"><i data-lucide="home" class="w-4 h-4"></i> Home</a>
+                <a href="#" onclick="scrollToSection('departments-section'); return false;" class="hover:text-blue-600 dark:hover:text-orange-400 transition-colors flex items-center gap-1.5"><i data-lucide="layout-grid" class="w-4 h-4"></i> Departments</a>
+                <a href="#" onclick="navigateTo('all-newsletters'); return false;" class="hover:text-blue-600 dark:hover:text-orange-400 transition-colors flex items-center gap-1.5"><i data-lucide="newspaper" class="w-4 h-4"></i> Newsletters</a>
+                <a href="#" onclick="navigateTo('contact-general'); return false;" class="hover:text-blue-600 dark:hover:text-orange-400 transition-colors flex items-center gap-1.5"><i data-lucide="phone-call" class="w-4 h-4"></i> Contact</a>
+            </nav>
+
+            <!-- Action Area (Login / Role Panel, Theme toggle) -->
+            <div class="flex items-center gap-4">
+                <!-- Theme Toggle -->
+                <button onclick="toggleDarkMode()" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors dark:border-slate-800 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300" aria-label="Toggle Theme">
+                    <i data-lucide="sun" id="theme-sun-icon" class="w-4 h-4 hidden"></i>
+                    <i data-lucide="moon" id="theme-moon-icon" class="w-4 h-4"></i>
+                </button>
+
+                <!-- Login Button or User Profile -->
+                <div id="auth-nav-container">
+                    <button onclick="navigateTo('login')" class="px-4 py-2 text-xs font-semibold bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 text-white rounded-xl shadow-md shadow-blue-500/10 hover:shadow-lg transition-all flex items-center gap-2">
+                        <i data-lucide="log-in" class="w-3.5 h-3.5"></i> Staff Login
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="p-2 rounded-xl border border-slate-200 md:hidden hover:bg-slate-100 transition-colors dark:border-slate-800 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">
+                    <i data-lucide="menu" id="menu-burger-icon" class="w-5 h-5"></i>
+                    <i data-lucide="x" id="menu-close-icon" class="w-5 h-5 hidden"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-md px-4 py-4 space-y-3 shadow-lg dark:bg-dkte-darkCard/95 dark:border-slate-800 transition-all duration-300">
+            <a href="#" onclick="toggleMobileMenu(); navigateTo('landing'); return false;" class="block px-3 py-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium text-sm flex items-center gap-2"><i data-lucide="home" class="w-4 h-4"></i> Home</a>
+            <a href="#" onclick="toggleMobileMenu(); scrollToSection('departments-section'); return false;" class="block px-3 py-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium text-sm flex items-center gap-2"><i data-lucide="layout-grid" class="w-4 h-4"></i> Departments</a>
+            <a href="#" onclick="toggleMobileMenu(); navigateTo('all-newsletters'); return false;" class="block px-3 py-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium text-sm flex items-center gap-2"><i data-lucide="newspaper" class="w-4 h-4"></i> Newsletters</a>
+            <a href="#" onclick="toggleMobileMenu(); navigateTo('contact-general'); return false;" class="block px-3 py-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium text-sm flex items-center gap-2"><i data-lucide="phone-call" class="w-4 h-4"></i> Contact</a>
+            <div class="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-center" id="mobile-auth-container">
+                <button onclick="toggleMobileMenu(); navigateTo('login')" class="w-full py-2.5 bg-blue-700 text-white rounded-xl text-xs font-semibold text-center flex items-center justify-center gap-2">
+                    <i data-lucide="log-in" class="w-4 h-4"></i> Staff Login
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Dynamic Container -->
+    <main class="flex-grow flex flex-col" id="main-content">
+        
+        <!-- SECTION: LANDING PAGE -->
+        <section id="view-landing" class="view-section flex flex-col">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden bg-slate-950 text-white py-24 md:py-32">
+                <!-- Background visual elements -->
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(30,58,138,0.4),rgba(255,255,255,0))]"></div>
+                <div class="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(15,23,42,0.1),#0b0f19)]"></div>
+                
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-orange-500/10 border border-orange-500/30 text-orange-400 mb-6 uppercase tracking-wider">
+                        <i data-lucide="award" class="w-3.5 h-3.5"></i> DKTE Society's
+                    </span>
+                    <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-orange-400 bg-clip-text text-transparent mb-6">
+                        Yashwantrao Chavan Polytechnic
+                    </h2>
+                    <p class="max-w-3xl mx-auto text-base sm:text-lg md:text-xl text-slate-300 font-light mb-10 leading-relaxed">
+                        A center of excellence in technical education, nurturing skills, creativity, and innovative mindset for future engineering leaders.
+                    </p>
+                    <div class="flex flex-wrap items-center justify-center gap-4">
+                        <button onclick="scrollToSection('departments-section')" class="px-8 py-3 bg-gradient-to-r from-blue-700 to-blue-600 hover:from-blue-600 hover:to-blue-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 transition-all flex items-center gap-2 transform hover:-translate-y-0.5">
+                            Explore Departments <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="navigateTo('all-newsletters')" class="px-8 py-3 bg-slate-900 border border-slate-700/80 hover:bg-slate-800 text-slate-200 hover:text-white font-semibold rounded-xl transition-colors flex items-center gap-2 transform hover:-translate-y-0.5">
+                            Read Newsletters <i data-lucide="newspaper" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Section -->
+            <div class="py-16 bg-white dark:bg-dkte-darkCard transition-colors duration-300">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+                            About Our Institute
+                        </h3>
+                        <div class="w-16 h-1 bg-orange-500 rounded"></div>
+                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                            Yashwantrao Chavan Polytechnic (YCP) under DKTE Society is located in Ichalkaranji, Maharashtra. It has been a pioneer in imparting technical skills and knowledge since its inception. Approved by AICTE & affiliated with MSBTE, YCP offers seven premier engineering diploma streams.
+                        </p>
+                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                            Our state-of-the-art laboratries, highly certified faculty, and extensive tie-ups with key manufacturing and technological firms ensure students receive top-tier, industry-focused qualifications and robust placement achievements.
+                        </p>
+                        <div class="grid grid-cols-2 gap-6 pt-4">
+                            <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 dark:bg-slate-900/50 dark:border-slate-800">
+                                <p class="text-3xl font-bold text-blue-700 dark:text-orange-400">7+</p>
+                                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Specializations</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 dark:bg-slate-900/50 dark:border-slate-800">
+                                <p class="text-3xl font-bold text-blue-700 dark:text-orange-400">95%</p>
+                                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Placement Ratio</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Collage Photo Showcase -->
+                    <div class="relative group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-blue-700 to-orange-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+                        <div class="relative bg-slate-950 text-slate-400 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl h-[340px] flex items-center justify-center p-6 text-center">
+                            <div class="space-y-4">
+                                <i data-lucide="graduation-cap" class="w-12 h-12 text-orange-500 mx-auto"></i>
+                                <h4 class="text-white text-xl font-bold">DKTE YCP Diploma Main Campus</h4>
+                                <p class="text-sm text-slate-400 max-w-sm">Equipped with central computing infrastructure, multi-floor libraries, innovative mechanical workshops, and smart classrooms.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Explore Departments Grid Section -->
+            <div id="departments-section" class="py-20 bg-slate-50 dark:bg-dkte-darkBg transition-colors duration-300">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16 space-y-4">
+                        <h3 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">Explore Departments</h3>
+                        <p class="text-slate-500 dark:text-slate-400 max-w-xl mx-auto">Click on any engineering department card to view its laboratory resources, academic schedules, events, and read newsletters.</p>
+                    </div>
+
+                    <!-- Cards Container -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="departments-cards-grid">
+                        <!-- Filled Dynamically via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: ALL NEWSLETTERS SEARCH -->
+        <section id="view-all-newsletters" class="view-section hidden py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow w-full">
+            <div class="mb-10 text-center space-y-4">
+                <h3 class="text-3xl font-extrabold text-slate-900 dark:text-white flex items-center justify-center gap-2"><i data-lucide="newspaper" class="text-orange-500 w-8 h-8"></i> Published Newsletters</h3>
+                <p class="text-slate-500 dark:text-slate-400">Search and read published academic, training, and event newsletters from all departments.</p>
+            </div>
+            
+            <!-- Search & Filters -->
+            <div class="mb-8 max-w-xl mx-auto flex items-center bg-white border border-slate-200 rounded-xl px-4 py-2.5 shadow-sm focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all dark:bg-dkte-darkCard dark:border-slate-800 dark:focus-within:ring-slate-850">
+                <i data-lucide="search" class="text-slate-400 w-5 h-5 mr-3"></i>
+                <input type="text" id="newsletter-search-input" oninput="searchNewsletters()" placeholder="Search by title, description or department..." class="w-full outline-none bg-transparent text-sm">
+            </div>
+
+            <!-- List Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="all-newsletters-grid">
+                <!-- Filled Dynamically -->
+            </div>
+        </section>
+
+        <!-- SECTION: NEWSLETTER READER -->
+        <section id="view-newsletter-reader" class="view-section hidden py-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-grow">
+            <!-- Back Button -->
+            <button onclick="navigateBack()" class="mb-6 flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-orange-400 dark:hover:text-orange-300">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+            </button>
+
+            <!-- Newsletter Content Card -->
+            <div class="bg-white border border-slate-200/80 rounded-2xl p-6 md:p-10 shadow-xl dark:bg-dkte-darkCard dark:border-slate-800" id="newsletter-reader-content">
+                <!-- Filled via JS -->
+            </div>
+        </section>
+
+        <!-- SECTION: GENERAL CONTACT FORM -->
+        <section id="view-contact-general" class="view-section hidden py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-grow">
+            <div class="text-center mb-12 space-y-4">
+                <h3 class="text-3xl font-extrabold text-slate-900 dark:text-white">Contact Our College</h3>
+                <p class="text-slate-500 dark:text-slate-400">Have a query? Drop a message and it will be routed to the respective department administrators.</p>
+            </div>
+            
+            <div class="bg-white border border-slate-200 rounded-2xl p-8 shadow-xl dark:bg-dkte-darkCard dark:border-slate-800">
+                <form id="general-contact-form" onsubmit="submitGeneralContact(event)" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Your Name</label>
+                            <input type="text" name="name" required class="w-full bg-slate-50 border border-slate-200 dark:bg-slate-900/50 dark:border-slate-800 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Email Address</label>
+                            <input type="email" name="email" required class="w-full bg-slate-50 border border-slate-200 dark:bg-slate-900/50 dark:border-slate-800 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Subject</label>
+                            <input type="text" name="subject" required class="w-full bg-slate-50 border border-slate-200 dark:bg-slate-900/50 dark:border-slate-800 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Route to Department</label>
+                            <select name="department" id="contact-dept-dropdown" class="w-full bg-slate-50 border border-slate-200 dark:bg-slate-900/50 dark:border-slate-800 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors">
+                                <!-- Loaded dynamically -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Your Message</label>
+                        <textarea name="message" rows="5" required class="w-full bg-slate-50 border border-slate-200 dark:bg-slate-900/50 dark:border-slate-800 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="send" class="w-4 h-4"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION: DEPARTMENT DASHBOARD -->
+        <section id="view-dept-dashboard" class="view-section hidden flex-grow w-full flex flex-col md:flex-row">
+            <!-- Sidebar for Department Sections navigation -->
+            <aside class="w-full md:w-64 bg-white border-b md:border-b-0 md:border-r border-slate-200 dark:bg-dkte-darkCard dark:border-slate-800 flex flex-col transition-colors duration-300">
+                <!-- Dept Info Header inside sidebar -->
+                <div class="p-6 border-b border-slate-200 dark:border-slate-800 text-center md:text-left">
+                    <span id="dashboard-dept-code" class="inline-block px-2.5 py-1 text-[10px] font-bold text-orange-500 bg-orange-500/10 rounded-md uppercase tracking-wider mb-2">CSE</span>
+                    <h4 id="dashboard-dept-name" class="text-md font-bold tracking-tight text-slate-900 dark:text-white">Computer Science</h4>
+                </div>
+                
+                <!-- Sidebar Menu Items -->
+                <nav class="p-4 space-y-1.5 flex-grow overflow-y-auto max-h-[300px] md:max-h-full" id="dept-sidebar-menu">
+                    <!-- Standard anchors generated via js to maintain high interactivity -->
+                </nav>
+
+                <!-- Document Download shortcuts -->
+                <div class="p-6 border-t border-slate-200 dark:border-slate-800 space-y-3 hidden md:block">
+                    <a id="download-academic-cal" href="#" target="_blank" class="w-full flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-blue-500 dark:border-slate-800 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-600 dark:text-slate-400">
+                        <span>Academic Calendar</span> <i data-lucide="calendar" class="w-4 h-4 text-blue-600"></i>
+                    </a>
+                    <a id="download-timetable" href="#" target="_blank" class="w-full flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-blue-500 dark:border-slate-800 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-600 dark:text-slate-400">
+                        <span>Class Time Table</span> <i data-lucide="clock" class="w-4 h-4 text-blue-600"></i>
+                    </a>
+                </div>
+            </aside>
+
+            <!-- Dashboard Content Panels Container -->
+            <div class="flex-grow p-6 md:p-10 overflow-y-auto max-w-5xl mx-auto w-full space-y-10" id="dept-dashboard-panels">
+                <!-- Dynamically filled with specific categories (Overview, Faculty, Placements, Workshops, Notices, Downloads, etc.) based on sidebar tabs -->
+            </div>
+        </section>
+
+        <!-- SECTION: LOGIN PORTAL -->
+        <section id="view-login" class="view-section hidden flex-grow flex items-center justify-center py-20 px-4">
+            <div class="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-2xl p-8 dark:bg-dkte-darkCard dark:border-slate-800/80">
+                <div class="text-center mb-8 space-y-2">
+                    <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white">Portal Sign In</h3>
+                    <p class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">For Admin & Department Staff</p>
+                </div>
+                
+                <form id="login-form" onsubmit="handleLoginSubmit(event)" class="space-y-6">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Username</label>
+                        <div class="relative flex items-center">
+                            <i data-lucide="user" class="absolute left-3.5 text-slate-400 w-4 h-4"></i>
+                            <input type="text" name="username" required placeholder="Enter username (e.g. cse_staff)" class="w-full bg-slate-50 border border-slate-200 dark:bg-slate-900/50 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Password</label>
+                        <div class="relative flex items-center">
+                            <i data-lucide="lock" class="absolute left-3.5 text-slate-400 w-4 h-4"></i>
+                            <input type="password" name="password" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 dark:bg-slate-900/50 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="unlock" class="w-4 h-4"></i> Sign In
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION: STAFF DASHBOARD -->
+        <section id="view-staff-dashboard" class="view-section hidden flex-grow w-full flex flex-col md:flex-row">
+            <!-- Sidebar for Staff Control -->
+            <aside class="w-full md:w-64 bg-white border-b md:border-b-0 md:border-r border-slate-200 dark:bg-dkte-darkCard dark:border-slate-800 flex flex-col">
+                <div class="p-6 border-b border-slate-200 dark:border-slate-800 text-center md:text-left">
+                    <span id="staff-dept-badge" class="inline-block px-2.5 py-1 text-[10px] font-bold text-orange-500 bg-orange-500/10 rounded-md uppercase tracking-wider mb-2">CSE STAFF</span>
+                    <h4 class="text-sm font-bold text-slate-950 dark:text-white" id="staff-sidebar-title">Manage Department</h4>
+                </div>
+                
+                <nav class="p-4 space-y-1.5 flex-grow" id="staff-sidebar-nav">
+                    <!-- Javascript will place tabs here (Details, Faculty, Labs, Placements, Events, Notices, Newsletters, Downloads, Contacts) -->
+                </nav>
+            </aside>
+
+            <!-- Staff Content Window -->
+            <div class="flex-grow p-6 md:p-10 overflow-y-auto max-w-5xl mx-auto w-full" id="staff-dashboard-content">
+                <!-- Dynamic tables, lists, and forms will render here based on selected category tab -->
+            </div>
+        </section>
+
+        <!-- SECTION: SUPER ADMIN DASHBOARD -->
+        <section id="view-admin-dashboard" class="view-section hidden flex-grow w-full flex flex-col md:flex-row">
+            <!-- Sidebar for Super Admin Control -->
+            <aside class="w-full md:w-64 bg-white border-b md:border-b-0 md:border-r border-slate-200 dark:bg-dkte-darkCard dark:border-slate-800 flex flex-col">
+                <div class="p-6 border-b border-slate-200 dark:border-slate-800 text-center md:text-left">
+                    <span class="inline-block px-2.5 py-1 text-[10px] font-bold text-orange-500 bg-orange-500/10 rounded-md uppercase tracking-wider mb-2">Portal Owner</span>
+                    <h4 class="text-sm font-bold text-slate-950 dark:text-white">Super Admin Panel</h4>
+                </div>
+                
+                <nav class="p-4 space-y-1.5 flex-grow" id="admin-sidebar-nav">
+                    <!-- Tabs (Analytics, Newsletters Approvals, Manage Departments, Manage Staff Accounts, Activity Logs, Contact Queries) -->
+                </nav>
+                
+                <!-- Backup actions bottom -->
+                <div class="p-6 border-t border-slate-200 dark:border-slate-800 space-y-2">
+                    <button onclick="triggerDbBackup()" class="w-full py-2.5 px-3 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                        <span>Database Backup</span> <i data-lucide="database" class="w-4 h-4 text-blue-600"></i>
+                    </button>
+                    <button onclick="exportReports()" class="w-full py-2.5 px-3 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                        <span>Export CSV Report</span> <i data-lucide="download" class="w-4 h-4 text-blue-600"></i>
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Super Admin content panels -->
+            <div class="flex-grow p-6 md:p-10 overflow-y-auto max-w-5xl mx-auto w-full" id="admin-dashboard-content">
+                <!-- Render dashboard widgets, approval lists, department grids, staff grids, activity tables dynamically -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200/80 py-8 text-center text-xs font-medium text-slate-500 transition-colors duration-300 dark:bg-dkte-darkCard dark:border-slate-800 dark:text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 space-y-3">
+            <p>© 2026 DKTE Society's Yashwantrao Chavan Polytechnic, Ichalkaranji. All Rights Reserved.</p>
+            <p class="text-[10px] text-slate-400 uppercase tracking-widest">Designed & Developed for Diploma Newsletter Management System</p>
+        </div>
+    </footer>
+
+    <!-- SHARED GLOBAL MODAL CONTAINER -->
+    <div id="global-modal-wrapper" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm hidden">
+        <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden transform scale-95 opacity-0 transition-all duration-300 dark:bg-dkte-darkCard dark:border-slate-800" id="global-modal-box">
+            <!-- Filled via JS depending on adding/editing faculty, labs, placement, calendar pdf, etc. -->
+        </div>
+    </div>
+
+    <!-- App Logic Script -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
