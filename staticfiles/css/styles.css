@@ -1,0 +1,132 @@
+/* Custom Styles for DKTE YCP Diploma Newsletter Portal */
+
+:root {
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Glassmorphism Styles */
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.dark .glass-card {
+    background: rgba(19, 28, 46, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Glowing Highlights */
+.glow-blue {
+    box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+}
+
+.glow-orange {
+    box-shadow: 0 10px 30px -10px rgba(249, 115, 22, 0.25);
+}
+
+/* Transitions */
+.transition-smooth {
+    transition: var(--transition-smooth);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: #334155;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+}
+
+.animate-slide-in {
+    animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Hover effects for cards */
+.hover-lift {
+    transition: var(--transition-smooth);
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.dark .hover-lift:hover {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+}
+
+/* Form Styling overrides */
+input:focus, select:focus, textarea:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.dark input:focus, .dark select:focus, .dark textarea:focus {
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+/* Custom HOD Banner */
+.hod-card::before {
+    content: 'HOD';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #f97316;
+    color: white;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.1em;
+}
+
+/* Sidebar Active Tab marker */
+.sidebar-active {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border-left: 3px solid #1e40af;
+}
+
+.dark .sidebar-active {
+    background-color: rgba(249, 115, 22, 0.08);
+    color: #f97316;
+    border-left: 3px solid #f97316;
+}

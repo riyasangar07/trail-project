@@ -3,6 +3,11 @@ name = "dkte_ycp_portal"
 version = "0.1.0"
 description = "Django portal"
 requires-python = ">=3.9"
-
+dependencies = [
+    "django",
+    "djangorestframework",
+    "django-cors-headers",
+    "whitenoise",
+]
 [tool.vercel]
 entrypoint = "dkte_ycp_portal.wsgi:application"
